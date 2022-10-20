@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import {
   createUserWithEmailAndPassword,
+  FacebookAuthProvider,
   getAuth,
+  GithubAuthProvider,
+  GoogleAuthProvider,
   sendEmailVerification,
+  signInWithPopup,
 } from "firebase/auth";
 import { NavLink } from "react-router-dom";
 import { app } from "./firebase/firebase.init";
+
+const googleProvider = new GoogleAuthProvider();
+const githubProvider = new GithubAuthProvider();
+const facebookProvider = new FacebookAuthProvider();
 
 const auth = getAuth(app);
 
@@ -13,13 +21,29 @@ const Signup = () => {
   const [success, setSuccess] = useState(false);
 
   const handlesignupWithFacebook = (event) => {
-    console.log("facebook login");
+    signInWithPopup(auth, facebookProvider)
+      .then((result) => {
+        console.log("facebook done");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
   const handlesignupWithGoogle = (event) => {
-    console.log("google login");
+    signInWithPopup(auth, googleProvider)
+      .then((result) => {})
+      .catch((error) => {
+        console.error(error);
+      });
   };
   const handlesignupWithGithub = (event) => {
-    console.log("github login");
+    signInWithPopup(auth, githubProvider)
+      .then((result) => {
+        console.log("github done");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
   const handlesignupWithEmail = (event) => {
     event.preventDefault();
@@ -143,13 +167,11 @@ const Signup = () => {
                     <span className="ml-4">Signup with Facebook</span>
                   </button>
                 </div>
-
                 <div className="my-12 text-center border-b">
                   <div className="inline-block px-2 text-sm font-medium leading-none tracking-wide text-gray-600 transform translate-y-1/2 bg-white">
                     Or Register with e-mail
                   </div>
                 </div>
-
                 <form
                   onSubmit={handlesignupWithEmail}
                   className="max-w-xs mx-auto"
@@ -187,7 +209,6 @@ const Signup = () => {
                     <span className="ml-3">Register</span>
                   </button>
                 </form>
-
                 {/* modal display */}
                 {success ? (
                   <>
@@ -218,7 +239,6 @@ const Signup = () => {
                   </>
                 ) : null}
                 {/* modal finished */}
-
                 <h4 className="mt-6">
                   Already have an account?{" "}
                   <NavLink
